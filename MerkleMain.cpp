@@ -5,6 +5,7 @@
 #include <iomanip>
 #include "MerkleMain.h"
 #include "CSVReader.h"
+#include "OrderBook.h"
 
 // Reason to have a separate constructor and init function
 // To separate the concerns - a constructor function creates the object & the init function commences the operation based using the obj created.
@@ -91,8 +92,31 @@ void MerkleMain::printExchangeStats(void){
     std::cout << "Exchange stats - Loading data ..." << std::endl;
     std::cout << "Analyse the transaction data from Exchange to make money!!" << std::endl;
     std::cout << "Order book currently contains " << orderbook.orders.size() <<" entries."<< std::endl;
+    std::cout << "Featuring entries for following products:" << std::endl;
+    std::cout << "#########################" << std::endl;
+    for (std::string const& p : orderbook.getKnownProducts())
+    {
+        std::cout << "Product: " << p << std::endl;
+        std::cout << "--------------------" << std::endl;
+        std::vector<OrderBookEntry> askEntries = orderbook.getOrders(OrderBookType::ask,
+                                                                            p,
+                                                                            "2020/03/17 17:01:24.884492");
+        std::cout << "With Ask Entry Count = " << askEntries.size() << std::endl;
+        std::cout << "Max Ask Price = " << orderbook.getHighPrice(askEntries) << std::endl;
+        std::cout << "Min Ask Price = " << orderbook.getLowPrice(askEntries) << std::endl;
+        std::cout << "     _-_-_-_-_-_-_     " << std::endl;
+        std::vector<OrderBookEntry> bidEntries = orderbook.getOrders(OrderBookType::bid,
+                                                                            p,
+                                                                            "2020/03/17 17:01:24.884492");
+        std::cout << "And Bid Entry Count = " << bidEntries.size() << std::endl;
+        std::cout << "Max Bid Price = " << orderbook.getHighPrice(bidEntries) << std::endl;
+        std::cout << "Min Bid Price = " << orderbook.getLowPrice(bidEntries) << std::endl;
+        std::cout << "====================" << std::endl;
+
+    }
+    
     // Printing out the entries stored inside the vector Using the iterator method
-    std::cout << "Details of the Order entries stored:" << std::endl;
+    std::cout << "Further details of the Order entries stored:" << std::endl;
     std::cout << "#############################################" << std::endl;
     unsigned int bidCount = 0;
     unsigned int askCount = 0;
@@ -159,7 +183,6 @@ void MerkleMain::printExchangeStats(void){
     std::cout << "Minimum Order price:    $" << lowPrice << std::endl;
     std::cout << "Maximum Order price:    $" << highPrice << std::endl;
     std::cout << "Spread in Order price:  $" << bidPriceSpread << std::endl;
-    std::cout << "----------------------------------------" << std::endl;
 }
 void MerkleMain::placeAsk(void){
     std::cout << "Place an ask - How much are you selling?" << std::endl;

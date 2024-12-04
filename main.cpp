@@ -11,6 +11,7 @@ int main()
 {   
     // Printing the in line interaction menu
     MerkleMain app{};
+    std::cout << "====================" << std::endl;
     std::cout << "Program Menu Details:" << std::endl;
     std::cout << "====================" << std::endl;
     app.init();
