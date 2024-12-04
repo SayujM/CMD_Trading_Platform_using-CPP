@@ -28,14 +28,14 @@ void MerkleMain::init()
         // Acting on the user input
         handleUseroption(userOption);
         // Restricting looping to 6 times
-        i++;
+        ++i;
     }
 }
 
 void MerkleMain::loadOrderBook(void)
 {
 
-    orders = CSVReader::readCSV("csv2.csv"); // Updated function to reach in data from CSV file (replacing the manual entries below)
+    orders = CSVReader::readCSV("csv3.csv"); // Updated function to reach in data from CSV file (replacing the manual entries below)
     // Manually inserting data into the vector (using the following 5 entries fetched from csv provided)
     /*  2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.8502489,2.46021
         2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.75042208,0.49825485
