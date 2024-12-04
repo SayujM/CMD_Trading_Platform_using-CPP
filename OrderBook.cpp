@@ -1,9 +1,9 @@
 #include "OrderBook.h"
-
+#include "CSVReader.h"
 
 OrderBook::OrderBook(std::string filename)
 {
-
+    orders = CSVReader::readCSV(filename);
 }
 
 std::vector<std::string> OrderBook::getKnownProducts()

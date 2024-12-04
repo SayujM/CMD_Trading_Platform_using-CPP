@@ -5,6 +5,7 @@
 #include<string>
 #include<vector>
 #include "OrderBookEntry.h"
+#include "OrderBook.h"
 
 class MerkleMain
 {
@@ -18,14 +19,14 @@ class MerkleMain
         int getUserOption(void);
         void handleUseroption(int userOption);
         void printHelp(void);
-        void loadOrderBook(void);
         void printExchangeStats(void);
         void placeAsk(void);
         void placeBid(void);
         void printWallet(void);
         void optionContinue(void);
         std::string toString(OrderBookType type);
-        std::vector<OrderBookEntry> orders;
+        // std::vector<OrderBookEntry> orders;
+        OrderBook orderbook{"csv3.csv"};
 };
 
 #endif // MERKLEMAIN_H

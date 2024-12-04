@@ -15,6 +15,7 @@ class OrderBook
         std::vector<OrderBookEntry> getOrders(  OrderBookType type, 
                                                 std::string product,
                                                 std::string timestamp);
+        std::vector<OrderBookEntry> orders;
 
 };
 

@@ -16,7 +16,6 @@ MerkleMain::MerkleMain()
 
 void MerkleMain::init()
 {
-    loadOrderBook();
     int i = 0;
     while (i < 6)  
     {
@@ -32,44 +31,6 @@ void MerkleMain::init()
     }
 }
 
-void MerkleMain::loadOrderBook(void)
-{
-
-    orders = CSVReader::readCSV("csv3.csv"); // Updated function to reach in data from CSV file (replacing the manual entries below)
-    // Manually inserting data into the vector (using the following 5 entries fetched from csv provided)
-    /*  2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.8502489,2.46021
-        2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.75042208,0.49825485
-        2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.75033244,0.2053277
-        2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.75033243,0.49825485
-        2020/03/17 17:01:24.884492,BTC/USDT,bid,5348.75027298,0.13939
-    */
-    // orders.push_back(OrderBookEntry(5348.8502489,
-    //                                 2.46021,
-    //                                 "2020/03/17 17:01:24.884492",
-    //                                 "BTC/USDT",
-    //                                 OrderBookType::bid));
-    // orders.push_back(OrderBookEntry(5348.75042208,
-    //                                 0.49825485,
-    //                                 "2020/03/17 17:01:24.884492",
-    //                                 "BTC/USDT",
-    //                                 OrderBookType::bid));
-    // orders.push_back(OrderBookEntry(5348.75033244,
-    //                                 0.2053277,
-    //                                 "2020/03/17 17:01:24.884492",
-    //                                 "BTC/USDT",
-    //                                 OrderBookType::bid));
-    // orders.push_back(OrderBookEntry(5348.75033243,
-    //                                 0.49825485,
-    //                                 "2020/03/17 17:01:24.884492",
-    //                                 "BTC/USDT",
-    //                                 OrderBookType::bid));
-    // orders.push_back(OrderBookEntry(5348.75027298,
-    //                                 0.13939,
-    //                                 "2020/03/17 17:01:24.884492",
-    //                                 "BTC/USDT",
-    //                                 OrderBookType::bid));
-    
-}
 
 void MerkleMain::printMenu(void)
 {
@@ -129,7 +90,7 @@ void MerkleMain::printHelp(void){
 void MerkleMain::printExchangeStats(void){
     std::cout << "Exchange stats - Loading data ..." << std::endl;
     std::cout << "Analyse the transaction data from Exchange to make money!!" << std::endl;
-    std::cout << "Order book currently contains " << orders.size() <<" entries."<< std::endl;
+    std::cout << "Order book currently contains " << orderbook.orders.size() <<" entries."<< std::endl;
     // Printing out the entries stored inside the vector Using the iterator method
     std::cout << "Details of the Order entries stored:" << std::endl;
     std::cout << "#############################################" << std::endl;
@@ -140,7 +101,7 @@ void MerkleMain::printExchangeStats(void){
     unsigned int BTC_USDT_Count = 0;
     unsigned int ETH_USDT_Count = 0;
     unsigned int DOGE_USDT_Count = 0;
-    for (const OrderBookEntry &order : orders)
+    for (const OrderBookEntry &order : orderbook.orders)
     {
         // std::cout << "Price: " << order.price << std::endl;
         // std::cout << "Amount: " << order.amount << std::endl;
@@ -179,14 +140,14 @@ void MerkleMain::printExchangeStats(void){
 
     // Fetching & displaying few basic insights from the limited data stored
     std::cout << std::fixed << std::setprecision(10);
-    double averagePrice = computeAveragePrice(orders);
-    double lowPrice = computeLowPrice(orders);
-    double highPrice = computeHighPrice(orders);
-    double bidPriceSpread = computePriceSpread(orders);
+    double averagePrice = computeAveragePrice(orderbook.orders);
+    double lowPrice = computeLowPrice(orderbook.orders);
+    double highPrice = computeHighPrice(orderbook.orders);
+    double bidPriceSpread = computePriceSpread(orderbook.orders);
 
     // A basic commentary on the order entries stored
     // std::cout << "Based on the above mentioned order details:" << std::endl;
-    std::cout << "Entries in order book:  " << orders.size() << std::endl;
+    std::cout << "Entries in order book:  " << orderbook.orders.size() << std::endl;
     std::cout << "Entries for ETH/BTC:    " << ETH_BTC_Count << std::endl;
     std::cout << "Entries for DOGE/BTC:   " << DOGE_BTC_Count << std::endl;
     std::cout << "Entries for BTC/USDT:   " << BTC_USDT_Count << std::endl;
