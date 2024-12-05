@@ -26,6 +26,7 @@ class MerkleMain
         void optionContinue(void);
         std::string toString(OrderBookType type);
         // std::vector<OrderBookEntry> orders;
+        std::string currentTime;
         OrderBook orderbook{"csv3.csv"};
 };
 
