@@ -24,9 +24,12 @@ class MerkleMain
         void placeBid(void);
         void printWallet(void);
         void optionContinue(void);
+        void currentAvgPrices(void);
+        void avgPriceChange(void);
         std::string toString(OrderBookType type);
         // std::vector<OrderBookEntry> orders;
         std::string currentTime;
+        std::string previousTime;
         OrderBook orderbook{"csv3.csv"};
 };
 

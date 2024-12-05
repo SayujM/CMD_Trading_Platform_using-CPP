@@ -74,6 +74,23 @@ double OrderBook::getLowPrice(std::vector<OrderBookEntry>& sharedOrders)
     return min;
 }
 
+double OrderBook::getAvgPrice(std::vector<OrderBookEntry>& sharedOrders)
+{
+    double sum = 0.0f;
+    double count = sharedOrders.size();
+    for (OrderBookEntry& e: sharedOrders)
+    {
+        sum += e.price;
+    }
+
+    if (count == 0)
+    {
+        return 0.0f;
+    }
+
+    return sum/count;
+}
+
 
 std::string OrderBook::getEarliestTime()
 {

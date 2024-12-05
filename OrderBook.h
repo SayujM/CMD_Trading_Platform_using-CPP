@@ -26,6 +26,7 @@ class OrderBook
         static double getHighPrice(std::vector<OrderBookEntry>& sharedOrders); // Function is static as it is not required to initialise the Class for using it 
         /** Return the min price for the Orders shared */                                        
         static double getLowPrice(std::vector<OrderBookEntry>& sharedOrders);  // As both these functions operate on the order details shared while calling the function. 
+        static double getAvgPrice(std::vector<OrderBookEntry>& sharedOrders);
         std::vector<OrderBookEntry> orders;
 
 };

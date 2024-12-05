@@ -19,6 +19,7 @@ void MerkleMain::init()
 {
     int i = 0;
     currentTime = orderbook.getEarliestTime();
+    previousTime = orderbook.getEarliestTime();
     while (i < 6)  
     {
         // Printing the menu
@@ -52,6 +53,10 @@ void MerkleMain::printMenu(void)
     std::cout << "5. Print wallet" << std::endl;
     // 6 continue 
     std::cout << "6. Continue" << std::endl;
+    // 7. Avg Price per product - Current Timeframe
+    std::cout << "7. Avg Price per product - Current Timeframe" << std::endl;
+    // 8. Avg Price Change per Product - Over Previous Timeframe
+    std::cout << "8. Avg Price Change per Product - Over Previous Timeframe" << std::endl;
     // Demarcator
     std::cout << "====================" << std::endl;
     std::cout << "Current Time is: " << currentTime << std::endl;
@@ -62,7 +67,7 @@ int MerkleMain::getUserOption(void){
     int userOption;
     while (true)
     {
-        std::cout << "Select option from 1 - 6" << std::endl;
+        std::cout << "Select option from 1 - 8" << std::endl;
         std::cin >> userOption;
         if (std::cin.fail())
         {
@@ -72,14 +77,14 @@ int MerkleMain::getUserOption(void){
             std::cout << "Invalid choice! Choose from 1 - 6." << std::endl;
             std::cout << "====================" << std::endl;
             continue;
-        } else if (userOption > 0 && userOption < 7)
+        } else if (userOption > 0 && userOption < 9)
         {
             std::cout << "Valid choice! You chose the option: " << userOption << std::endl;  //ignores the rest of the input line, up to the newline character. This effectively discards the invalid input.
             std::cout << "====================" << std::endl;
             break;
         } else
         {
-            std::cout << "Invalid choice! Choose from 1 - 6." << std::endl;
+            std::cout << "Invalid choice! Choose from 1 - 8." << std::endl;
             std::cout << "====================" << std::endl;
         }
         
@@ -92,16 +97,16 @@ void MerkleMain::printHelp(void){
     std::cout << "and follow the onscreen instructions." << std::endl;
 }
 void MerkleMain::printExchangeStats(void){
-    std::cout << "Exchange stats - Loading data ..." << std::endl;
-    std::cout << "Analyse the transaction data from Exchange to make money!!" << std::endl;
-    std::cout << "Order book currently contains " << orderbook.orders.size() <<" entries."<< std::endl;
-    std::cout << "Featuring entries for following products:" << std::endl;
+    // std::cout << "Exchange stats - Loading data ..." << std::endl;
+    // std::cout << "Analyse the transaction data from Exchange to make money!!" << std::endl;
+    // std::cout << "Order book currently contains " << orderbook.orders.size() <<" entries."<< std::endl;
+    // std::cout << "Featuring entries for following products:" << std::endl;
+    std::cout << "Exchange stats - For the Timestamp: " << currentTime << std::endl;
     std::cout << "#########################" << std::endl;
     for (std::string const& p : orderbook.getKnownProducts())
     {
         std::cout << "Product: " << p << std::endl;
         std::cout << "--------------------" << std::endl;
-        std::cout << "For the Timestamp: " << currentTime << std::endl;
         std::vector<OrderBookEntry> askEntries = orderbook.getOrders(OrderBookType::ask,
                                                                             p,
                                                                             currentTime);
@@ -166,6 +171,7 @@ void MerkleMain::printExchangeStats(void){
 
     }
 
+    // Avoiding the below placeholder stats previously used for testing
     // Fetching & displaying few basic insights from the limited data stored
     std::cout << std::fixed << std::setprecision(10);
     double averagePrice = computeAveragePrice(orderbook.orders);
@@ -175,18 +181,18 @@ void MerkleMain::printExchangeStats(void){
 
     // A basic commentary on the order entries stored
     // std::cout << "Based on the above mentioned order details:" << std::endl;
-    std::cout << "Entries in order book:  " << orderbook.orders.size() << std::endl;
-    std::cout << "Entries for ETH/BTC:    " << ETH_BTC_Count << std::endl;
-    std::cout << "Entries for DOGE/BTC:   " << DOGE_BTC_Count << std::endl;
-    std::cout << "Entries for BTC/USDT:   " << BTC_USDT_Count << std::endl;
-    std::cout << "Entries for ETH/USDT:   " << ETH_USDT_Count << std::endl;
-    std::cout << "Entries for DOGE/USDT:  " << DOGE_USDT_Count << std::endl;
-    std::cout << "Total bid orders:       " << bidCount << std::endl;
-    std::cout << "Total ask orders:       " << askCount << std::endl;
-    std::cout << "Average Order price:    $" << averagePrice << std::endl;
-    std::cout << "Minimum Order price:    $" << lowPrice << std::endl;
-    std::cout << "Maximum Order price:    $" << highPrice << std::endl;
-    std::cout << "Spread in Order price:  $" << bidPriceSpread << std::endl;
+    // std::cout << "Entries in order book:  " << orderbook.orders.size() << std::endl;
+    // std::cout << "Entries for ETH/BTC:    " << ETH_BTC_Count << std::endl;
+    // std::cout << "Entries for DOGE/BTC:   " << DOGE_BTC_Count << std::endl;
+    // std::cout << "Entries for BTC/USDT:   " << BTC_USDT_Count << std::endl;
+    // std::cout << "Entries for ETH/USDT:   " << ETH_USDT_Count << std::endl;
+    // std::cout << "Entries for DOGE/USDT:  " << DOGE_USDT_Count << std::endl;
+    // std::cout << "Total bid orders:       " << bidCount << std::endl;
+    // std::cout << "Total ask orders:       " << askCount << std::endl;
+    // std::cout << "Average Order price:    $" << averagePrice << std::endl;
+    // std::cout << "Minimum Order price:    $" << lowPrice << std::endl;
+    // std::cout << "Maximum Order price:    $" << highPrice << std::endl;
+    // std::cout << "Spread in Order price:  $" << bidPriceSpread << std::endl;
 }
 void MerkleMain::placeAsk(void){
     std::cout << "Place an ask - How much are you selling?" << std::endl;
@@ -205,9 +211,96 @@ void MerkleMain::optionContinue(void){
     // std::cout << "Continue - Going through a transaction" << std::endl;
     // std::cout << "You have reached the other side!!" << std::endl;
     std::cout << "Continue - Going to the NEXT timeframe" << std::endl;
+    previousTime = currentTime;
     currentTime = orderbook.getNextTime(currentTime);
     std::cout << "Updated current time is: " << currentTime << std::endl;
 
+}
+
+
+void MerkleMain::currentAvgPrices(void)
+{
+    std::cout << "For the Timestamp: " << currentTime << std::endl;
+    for (std::string const& p : orderbook.getKnownProducts())
+    {
+        std::cout << "Product: " << p << std::endl;
+        std::cout << "--------------------" << std::endl;
+        std::vector<OrderBookEntry> askEntries = orderbook.getOrders(OrderBookType::ask,
+                                                                            p,
+                                                                            currentTime);
+        std::cout << "Ask Entry Count = " << askEntries.size() << std::endl;
+        std::cout << "Average Ask Price = " << orderbook.getAvgPrice(askEntries) << std::endl;
+        std::cout << "     _-_-_-_-_-_-_     " << std::endl;
+        std::vector<OrderBookEntry> bidEntries = orderbook.getOrders(OrderBookType::bid,
+                                                                            p,
+                                                                            currentTime);
+        std::cout << "And Bid Entry Count = " << bidEntries.size() << std::endl;
+        std::cout << "Average Bid Price = " << orderbook.getAvgPrice(bidEntries) << std::endl;
+        std::cout << "====================" << std::endl;
+
+    }
+}
+
+void MerkleMain::avgPriceChange(void)
+{
+    std::cout << "For the Timestamp: " << currentTime << std::endl;
+    if ( currentTime != previousTime)
+    {
+        for (std::string const& p : orderbook.getKnownProducts())
+        {
+            std::cout << "Product: " << p << std::endl;
+            std::cout << "--------------------" << std::endl;
+            std::vector<OrderBookEntry> askEntriesCurrent = orderbook.getOrders(OrderBookType::ask,
+                                                                                p,
+                                                                                currentTime);
+            std::vector<OrderBookEntry> askEntriesPrevious = orderbook.getOrders(OrderBookType::ask,
+                                                                                p,
+                                                                                previousTime);
+            double currentAvgAskPrice = orderbook.getAvgPrice(askEntriesCurrent);
+            double previousAvgAskPrice = orderbook.getAvgPrice(askEntriesPrevious);
+            std::cout << "Current Average Ask Price = " << currentAvgAskPrice << std::endl;
+            std::cout << "Previous Average Ask Price = " << previousAvgAskPrice << std::endl;
+            std::cout << "Delta = " << currentAvgAskPrice - previousAvgAskPrice  << std::endl;
+            if (previousAvgAskPrice != 0) 
+            {
+                double deltaAsk = ((currentAvgAskPrice / previousAvgAskPrice) - 1) * 100;
+                // std::cout << std::fixed << std::setprecision(2);
+                std::cout << "Delta-% = " << deltaAsk << "%" << std::endl;
+            } 
+            else 
+            {
+                std::cout << "Previous average ask price is zero, cannot calculate delta percentage." << std::endl;
+            }
+            std::cout << "     _-_-_-_-_-_-_     " << std::endl;
+            std::vector<OrderBookEntry> bidEntriesCurrent = orderbook.getOrders(OrderBookType::bid,
+                                                                                p,
+                                                                                currentTime);
+            std::vector<OrderBookEntry> bidEntriesPrevious = orderbook.getOrders(OrderBookType::bid,
+                                                                                p,
+                                                                                previousTime);
+            double currentAvgBidPrice = orderbook.getAvgPrice(bidEntriesCurrent);
+            double previousAvgBidPrice = orderbook.getAvgPrice(bidEntriesPrevious);
+            std::cout << "Current Average Bid Price = " << currentAvgBidPrice << std::endl;
+            std::cout << "Previous Average Bid Price = " << previousAvgBidPrice << std::endl;
+            std::cout << "Delta = " << currentAvgBidPrice - previousAvgBidPrice  << std::endl;
+            if (previousAvgBidPrice != 0) 
+            {
+                double deltaBid = ((currentAvgBidPrice / previousAvgBidPrice) - 1) * 100;
+                // std::cout << std::fixed << std::setprecision(2);
+                std::cout << "Delta-% = " << deltaBid << "%" << std::endl;
+            } 
+            else 
+            {
+                std::cout << "Previous average ask price is zero, cannot calculate delta percentage." << std::endl;
+            }
+            std::cout << "====================" << std::endl;
+
+        }
+    }
+    else
+    {
+        std::cout << "First use Option-6 to progress timeframe & then use the option to check change in a single timeframe!" << std::endl;
+    }
 }
 
 void MerkleMain::handleUseroption(int userOption){
@@ -230,6 +323,12 @@ void MerkleMain::handleUseroption(int userOption){
         break;
     case 6:
         optionContinue();
+        break;
+    case 7:
+        currentAvgPrices();
+        break;
+    case 8:
+        avgPriceChange();
         break;
     default:
         std::cout << "Invalid Choice! Try again" << std::endl;
