@@ -80,3 +80,23 @@ std::string OrderBook::getEarliestTime()
     // Assuming the transaction data are sorted wrt timestamp
     return orders[0].timestamp;
 }
+
+std::string OrderBook::getNextTime(std::string timestamp)
+{
+    // Assuming the transaction data are sorted wrt timestamp
+    // Next Time stamp is the first timestamp greater than the function input timestamp
+    std::string nextTimeStamp = "";
+    for (OrderBookEntry& e: orders)
+    {
+        if (e.timestamp > timestamp)
+        {
+            nextTimeStamp = e.timestamp;
+            break;
+        }
+    }
+    if (nextTimeStamp == "") // That is we couldn't find a timestamp larger than the given timestamp
+    {
+        nextTimeStamp = orders[0].timestamp; // We wrap back the timestamp to start again from the top!
+    }
+    return nextTimeStamp;
+}

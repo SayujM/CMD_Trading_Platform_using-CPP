@@ -202,8 +202,12 @@ void MerkleMain::printWallet(void){
     std::cout << "Don't worry, just keep at it!!" << std::endl;
 }
 void MerkleMain::optionContinue(void){
-    std::cout << "Continue - Going through a transaction" << std::endl;
-    std::cout << "You have reached the other side!!" << std::endl;
+    // std::cout << "Continue - Going through a transaction" << std::endl;
+    // std::cout << "You have reached the other side!!" << std::endl;
+    std::cout << "Continue - Going to the NEXT timeframe" << std::endl;
+    currentTime = orderbook.getNextTime(currentTime);
+    std::cout << "Updated current time is: " << currentTime << std::endl;
+
 }
 
 void MerkleMain::handleUseroption(int userOption){

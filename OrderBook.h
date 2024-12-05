@@ -17,6 +17,11 @@ class OrderBook
                                                 std::string timestamp);
         /** Returns a string with the earliest timestamp */
         std::string getEarliestTime();
+        /** Returns the next timestamp given the current time 
+         *  In case there isn't a greater timestamp, we wrap
+         *  back to the earliest timestamp.
+        */
+        std::string getNextTime(std::string timestamp);
         /** Return the max price for the Orders shared */                                        
         static double getHighPrice(std::vector<OrderBookEntry>& sharedOrders); // Function is static as it is not required to initialise the Class for using it 
         /** Return the min price for the Orders shared */                                        
