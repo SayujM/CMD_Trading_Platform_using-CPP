@@ -139,6 +139,7 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
     double price, amount;
     if (tokens.size() != 5) // Implies that we have an entry that doesn't follow the standard format
         {
+            std::cout << "Error Message From: CSVReader::stringsToOBE Function" << std::endl;
             std::cout << "Bad Line. Omitting it." << std::endl;
             throw std::exception{};   // Crash out of program if we don't have proper input tokens vector
         }
@@ -151,6 +152,7 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
         catch(const std::exception& e)
         {
             // std::cerr << e.what() << std::endl;
+            std::cout << "Error Message From: CSVReader::stringsToOBE Function" << std::endl;
             std::cout << "Bad Floating point values received in file!" << std::endl;
             std::cout << "Received Floats: " << tokens[3] << " | " << tokens[4] << std::endl;
             throw;    // Crash out of program if we don't have proper numerical inputs
@@ -164,4 +166,35 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
 
     return obe;
 
+}
+
+OrderBookEntry CSVReader::stringsToOBE(std::string _price,
+                                        std::string _amount,
+                                        std::string timestamp,
+                                        std::string product,
+                                        OrderBookType orderType)
+{
+    double price, amount;
+    try
+    {
+        price = std::stod(_price); // Utilising the standard string to double function to convert str to double
+        amount = std::stod(_amount);
+    }
+    catch(const std::exception& e)
+    {
+        // std::cerr << e.what() << std::endl;
+        std::cout << "Error Message From: CSVReader::stringsToOBE Function" << std::endl;
+        std::cout << "Bad Floating point values received in file!" << std::endl;
+        std::cout << "Received Floats: " << _price << " | " << _amount << std::endl;
+        throw;    // Crash out of program if we don't have proper numerical inputs
+    }
+        
+
+    OrderBookEntry obe{ price,
+                        amount,
+                        timestamp,
+                        product,
+                        orderType};
+
+    return obe;
 }

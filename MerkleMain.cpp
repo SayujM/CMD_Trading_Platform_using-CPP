@@ -3,6 +3,7 @@
 #include<string>
 #include<vector>
 #include <iomanip>
+#include<algorithm>
 #include "MerkleMain.h"
 #include "CSVReader.h"
 #include "OrderBook.h"
@@ -195,8 +196,36 @@ void MerkleMain::printExchangeStats(void){
     // std::cout << "Spread in Order price:  $" << bidPriceSpread << std::endl;
 }
 void MerkleMain::placeAsk(void){
-    std::cout << "Place an ask - How much are you selling?" << std::endl;
-    std::cout << "Use the Exchange stats to get the best price." << std::endl;
+    std::cout << "Place an ask using the format: product,price,amount" << std::endl;
+    std::cout << "For example: BTC/USDT,5394.8,0.5" << std::endl;
+    std::string askUserInput;
+    /* One of the challenges of using getline is that it reads from the cin buffer as well.
+    We are using cin for capturing the user input for menu option selected which contains a number & \n (from the enter key). Number is passed on to the program & 
+    The new line character \n sits in buffer & if not cleared will be picked up by the getline command in this menu option of placeAsk.
+    So we need to clear the buffer prior to using getline using the code below*/
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Code from stackoverflow
+    std::getline(std::cin, askUserInput);
+    // Let's use the tokenise function from CSVReader (ensure the same is public) to split user comma separated input taken for ask
+    std::vector<std::string> tokens = CSVReader::tokenise(askUserInput, ',');
+    // Adding a check on the product string entered to ensure that it is part of our existing product types (from the csv loaded)
+    std::vector<std::string> acceptedProducts = orderbook.getKnownProducts(); // Using the function to get all known products.
+    auto it = std::find(acceptedProducts.begin(), acceptedProducts.end(), tokens[0]); // As the token[0] holds product entered by user.
+    if(it != acceptedProducts.end())
+    {
+        std::cout<< "Product entered: " << tokens[0] << ". And has been matched by std::find." << std::endl;
+    }
+    if (tokens.size() != 3 && it != acceptedProducts.end())
+    {
+        std::cout << "Bad Input! You typed: " << askUserInput << std::endl;
+    }
+    else
+    {
+        OrderBookEntry obe = CSVReader::stringsToOBE(tokens[1],
+                                                    tokens[2],
+                                                    currentTime,
+                                                    tokens[0],
+                                                    OrderBookType::ask); // Note we are not catching the error thrown by stod!
+    }
 }
 void MerkleMain::placeBid(void){
     std::cout << "Place a bid - How much are you willing to pay?" << std::endl;
@@ -217,7 +246,7 @@ void MerkleMain::optionContinue(void){
 
 }
 
-
+/** Prints out the average prices for both Ask & Bid Entries for the current timeframe */
 void MerkleMain::currentAvgPrices(void)
 {
     std::cout << "For the Timestamp: " << currentTime << std::endl;
@@ -241,6 +270,7 @@ void MerkleMain::currentAvgPrices(void)
     }
 }
 
+/** Prints out the change in average prices for both Ask & Bid Entries */
 void MerkleMain::avgPriceChange(void)
 {
     std::cout << "For the Timestamp: " << currentTime << std::endl;

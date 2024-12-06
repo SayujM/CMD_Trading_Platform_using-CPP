@@ -24,7 +24,9 @@ class MerkleMain
         void placeBid(void);
         void printWallet(void);
         void optionContinue(void);
+        /** Prints out the average prices for both Ask & Bid Entries for the current timeframe */
         void currentAvgPrices(void);
+        /** Prints out the change in average prices for both Ask & Bid Entries */
         void avgPriceChange(void);
         std::string toString(OrderBookType type);
         // std::vector<OrderBookEntry> orders;
