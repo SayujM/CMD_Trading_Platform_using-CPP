@@ -210,21 +210,37 @@ void MerkleMain::placeAsk(void){
     // Adding a check on the product string entered to ensure that it is part of our existing product types (from the csv loaded)
     std::vector<std::string> acceptedProducts = orderbook.getKnownProducts(); // Using the function to get all known products.
     auto it = std::find(acceptedProducts.begin(), acceptedProducts.end(), tokens[0]); // As the token[0] holds product entered by user.
-    if(it != acceptedProducts.end())
+    if (tokens.size() != 3 || it == acceptedProducts.end())
     {
-        std::cout<< "Product entered: " << tokens[0] << ". And has been matched by std::find." << std::endl;
-    }
-    if (tokens.size() != 3 && it != acceptedProducts.end())
-    {
+        std::cout << "Error Message from: MerkleMain::placeAsk function:" << std::endl;
         std::cout << "Bad Input! You typed: " << askUserInput << std::endl;
+        if (it == acceptedProducts.end())
+        {
+            std::cout << "NOTE: Your Order type \"" << tokens[0] << "\" is not supported!" << std::endl;
+            std::cout << "Following are the Order Types accepted for trading on our exchange:" << std::endl;
+            for (const std::string& s : acceptedProducts)
+            {
+                std::cout << s << std::endl;
+            }
+        }
     }
     else
     {
-        OrderBookEntry obe = CSVReader::stringsToOBE(tokens[1],
+        try
+        {
+            OrderBookEntry obe = CSVReader::stringsToOBE(tokens[1],
                                                     tokens[2],
                                                     currentTime,
                                                     tokens[0],
-                                                    OrderBookType::ask); // Note we are not catching the error thrown by stod!
+                                                    OrderBookType::ask);
+        std::cout << "Your Input: " << askUserInput << " is valid! Entry accepted for further processing." << std::endl;
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << "Error Message from: MerkleMain::placeAsk function:" << std::endl;
+            std::cout << "Bad Floating point values entered: " << tokens[1] << " or " << tokens[2] << std::endl;
+        }
+        
     }
 }
 void MerkleMain::placeBid(void){
