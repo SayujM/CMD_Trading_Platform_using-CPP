@@ -21,7 +21,7 @@ void MerkleMain::init()
     int i = 0;
     currentTime = orderbook.getEarliestTime();
     previousTime = orderbook.getEarliestTime();
-    while (i < 6)  
+    while (i < 9)  
     {
         // Printing the menu
         printMenu();
@@ -125,9 +125,9 @@ void MerkleMain::printExchangeStats(void){
 
     }
     
-    // Printing out the entries stored inside the vector Using the iterator method
-    std::cout << "Further details of the Order entries stored:" << std::endl;
-    std::cout << "#############################################" << std::endl;
+    // AVOIDING PRINTING THIS NOW: Printing out the entries stored inside the vector Using the iterator method
+    // std::cout << "Further details of the Order entries stored:" << std::endl;
+    // std::cout << "#############################################" << std::endl;
     unsigned int bidCount = 0;
     unsigned int askCount = 0;
     unsigned int ETH_BTC_Count = 0;
@@ -234,6 +234,7 @@ void MerkleMain::placeAsk(void){
                                                     tokens[0],
                                                     OrderBookType::ask);
         std::cout << "Your Input: " << askUserInput << " is valid! Entry accepted for further processing." << std::endl;
+        orderbook.insertOrder(obe);
         }
         catch(const std::exception& e)
         {

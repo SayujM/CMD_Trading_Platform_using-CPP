@@ -27,6 +27,10 @@ class OrderBookEntry
                         std::string _product,
                         OrderBookType _orderType);
         static OrderBookType strToOrderBookType(std::string token);
+        static bool compareByTimestamp(OrderBookEntry& e1, OrderBookEntry& e2)
+        {
+            return e1.timestamp < e2.timestamp;
+        }
         // Declaring the class data members
         double price;
         double amount;

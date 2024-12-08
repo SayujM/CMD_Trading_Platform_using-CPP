@@ -1,6 +1,7 @@
 #include "OrderBook.h"
 #include "CSVReader.h"
 #include<map>
+#include<algorithm>
 
 OrderBook::OrderBook(std::string filename)
 {
@@ -116,4 +117,12 @@ std::string OrderBook::getNextTime(std::string timestamp)
         nextTimeStamp = orders[0].timestamp; // We wrap back the timestamp to start again from the top!
     }
     return nextTimeStamp;
+}
+
+
+void OrderBook::insertOrder(OrderBookEntry& userOrderEntry)
+{
+    orders.push_back(userOrderEntry); // Add the user shared order entry to the end of the transaction data
+    std::sort(orders.begin(), orders.end(),OrderBookEntry::compareByTimestamp); // Std sort function takes start, end & logic (function) for sorting criteria
+
 }

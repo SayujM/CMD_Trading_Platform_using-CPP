@@ -28,6 +28,8 @@ class OrderBook
         static double getLowPrice(std::vector<OrderBookEntry>& sharedOrders);  // As both these functions operate on the order details shared while calling the function. 
         /** Return the average price for the Orders shared */ 
         static double getAvgPrice(std::vector<OrderBookEntry>& sharedOrders);
+        /** Insert User Provided Order Book Entry to Transaction Database */
+        void insertOrder(OrderBookEntry& userOrderEntry); // Note that this function can't be static as it needs orders from the class instance to work.
         std::vector<OrderBookEntry> orders;
 
 };
