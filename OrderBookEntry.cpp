@@ -44,6 +44,8 @@ std::string toString(OrderBookType type)
         return "bid";
     case OrderBookType::ask:
         return "ask";
+    case OrderBookType::sale:
+        return "sale";
     default:
         return "unknown";
     }

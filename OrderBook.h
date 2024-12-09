@@ -30,6 +30,8 @@ class OrderBook
         static double getAvgPrice(std::vector<OrderBookEntry>& sharedOrders);
         /** Insert User Provided Order Book Entry to Transaction Database */
         void insertOrder(OrderBookEntry& userOrderEntry); // Note that this function can't be static as it needs orders from the class instance to work.
+        /** Match the orders based on the bid an ask prices for a given product & timestamp  */
+        std::vector<OrderBookEntry> matchAsksToBids(const std::string product, const std::string timestamp);
         std::vector<OrderBookEntry> orders;
 
 };

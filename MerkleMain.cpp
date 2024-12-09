@@ -298,6 +298,24 @@ void MerkleMain::optionContinue(void){
     // std::cout << "Continue - Going through a transaction" << std::endl;
     // std::cout << "You have reached the other side!!" << std::endl;
     std::cout << "Continue - Going to the NEXT timeframe" << std::endl;
+    std::vector<OrderBookEntry> sales;
+    // Testing the Matching Algorithm
+    for (std::string const& p : orderbook.getKnownProducts())
+    {
+        sales = orderbook.matchAsksToBids(p, currentTime);
+        if (sales.size() > 0)
+        {
+            std::cout << "Details for successful sales for product: \"" << p << "\" in the current time interval." << std::endl;
+            std::cout << "Sales made (count): " << sales.size() << std::endl;
+            for (unsigned int i = 0; i < sales.size(); ++i)
+            {
+                std::cout << "Transaction-" << i+1 << ": Amount Sold: " << sales[i].amount << " | Sold at Price: " << sales[i].price << std::endl;
+            }
+        }
+    }
+    
+    std::cout << "Sales made (count): " << sales.size() << std::endl;
+    
     previousTime = currentTime;
     currentTime = orderbook.getNextTime(currentTime);
     std::cout << "Updated current time is: " << currentTime << std::endl;

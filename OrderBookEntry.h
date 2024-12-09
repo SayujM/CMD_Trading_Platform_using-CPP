@@ -12,7 +12,8 @@ enum class OrderBookType
 {
     bid,
     ask,
-    unknown
+    unknown,
+    sale
 };
 
 // Creating a class for holding Order Book entries
@@ -27,9 +28,17 @@ class OrderBookEntry
                         std::string _product,
                         OrderBookType _orderType);
         static OrderBookType strToOrderBookType(std::string token);
-        static bool compareByTimestamp(OrderBookEntry& e1, OrderBookEntry& e2)
+        static bool compareByTimestamp(const OrderBookEntry& e1, const OrderBookEntry& e2)
         {
             return e1.timestamp < e2.timestamp;
+        }
+        static bool compareByPriceAsc(const OrderBookEntry& e1, const OrderBookEntry& e2)
+        {
+            return e1.price < e2.price;
+        }
+        static bool compareByPriceDesc(const OrderBookEntry& e1, const OrderBookEntry& e2)
+        {
+            return e1.price > e2.price;
         }
         // Declaring the class data members
         double price;

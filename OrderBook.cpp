@@ -126,3 +126,76 @@ void OrderBook::insertOrder(OrderBookEntry& userOrderEntry)
     std::sort(orders.begin(), orders.end(),OrderBookEntry::compareByTimestamp); // Std sort function takes start, end & logic (function) for sorting criteria
 
 }
+
+
+/* Key characteristics of the matching algorithm implemented below:
+• The lowest ask is processed first.
+• The highest bid that matches an ask is given priority over lower, matching bids.
+• The lowest price is paid - so if a bid is offering to pay more than an ask, the bidder will only pay as much as the asker wants.
+• Partial sales are allowed - if an ask and a bid match but the amounts do not match, the largest possible amount is sold
+• Partially matched bids or asks can be re-processed and matched against further bids or asks*/
+std::vector<OrderBookEntry> OrderBook::matchAsksToBids(const std::string product, const std::string timestamp)
+{
+    std::vector<OrderBookEntry> asks = getOrders(OrderBookType::ask, product, timestamp);
+    std::vector<OrderBookEntry> bids = getOrders(OrderBookType::bid, product, timestamp);
+    std::vector<OrderBookEntry> sales;
+
+    // sort asks lowest first
+    std::sort(asks.begin(), asks.end(),OrderBookEntry::compareByPriceAsc);
+    // sort bids highest first
+    std::sort(bids.begin(), bids.end(),OrderBookEntry::compareByPriceDesc);
+
+    for (OrderBookEntry& ask : asks)
+    {
+        for (OrderBookEntry& bid : bids )
+        {
+            if ((ask.amount > 0) && (bid.amount > 0) && (bid.price >= ask.price))
+            {
+                // There is a valid match: Let's create and update sale order book entr
+                OrderBookEntry sale{ask.price,
+                                    0,
+                                    timestamp,
+                                    product,
+                                    OrderBookType::sale};
+                // We need to capture the right amount to be updated for the sale:
+                // Scenario-1: Bid Amount equals amount from ask
+                if (bid.amount == ask.amount)
+                {
+                    sale.amount = ask.amount;
+                    // Sale Entry is now complete - let's add it to the sales vector
+                    sales.push_back(sale);
+                    // Re-set the bid: So that it is not considered again
+                    bid.amount = 0;
+                    // We have exhausted the ask entry so we can break out of this loop & proceed to next ask
+                    ask.amount = 0;
+                    break;
+                }
+                // Scenario-2: Bid Amount greater than amount from ask
+                if (bid.amount > ask.amount)
+                {
+                    sale.amount = ask.amount;
+                    // Sale Entry is now complete - let's add it to the sales vector
+                    sales.push_back(sale);
+                    // Adjust the bid amount so that it is considered for the next ask order
+                    bid.amount -= ask.amount;
+                    // We have exhausted the ask entry so we can break out of this loop & proceed to next ask
+                    ask.amount = 0;
+                    break;
+                }
+                // Scenario-3: Bid Amount lower than amount from ask
+                if (bid.amount < ask.amount)
+                {
+                    sale.amount = bid.amount;
+                    // Sale Entry is now complete - let's add it to the sales vector
+                    sales.push_back(sale);
+                    // Re-set the bid: So that it is not considered again
+                    bid.amount = 0;
+                    // We have not exhausted the ask order:
+                    ask.amount -= bid.amount;
+                    continue;
+                }
+            }
+        }
+    }
+    return sales;
+}
