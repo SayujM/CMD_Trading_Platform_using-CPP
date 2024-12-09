@@ -245,8 +245,49 @@ void MerkleMain::placeAsk(void){
     }
 }
 void MerkleMain::placeBid(void){
-    std::cout << "Place a bid - How much are you willing to pay?" << std::endl;
-    std::cout << "Use the Exchange stats to get the best price." << std::endl;
+    // std::cout << "Place a bid - How much are you willing to pay?" << std::endl;
+    // std::cout << "Use the Exchange stats to get the best price." << std::endl;
+    std::cout << "Place a bid using the format: product,price,amount" << std::endl;
+    std::cout << "For example: BTC/USDT,5394.8,0.5" << std::endl;
+    std::string bidUserInput;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Code from stackoverflow
+    std::getline(std::cin, bidUserInput);
+    std::vector<std::string> tokens = CSVReader::tokenise(bidUserInput, ',');
+    std::vector<std::string> acceptedProducts = orderbook.getKnownProducts(); 
+    auto it = std::find(acceptedProducts.begin(), acceptedProducts.end(), tokens[0]);
+    if (tokens.size() != 3 || it == acceptedProducts.end())
+    {
+        std::cout << "Error Message from: MerkleMain::placeBid function:" << std::endl;
+        std::cout << "Bad Input! You typed: " << bidUserInput << std::endl;
+        if (it == acceptedProducts.end())
+        {
+            std::cout << "NOTE: Your Order type \"" << tokens[0] << "\" is not supported!" << std::endl;
+            std::cout << "Following are the Order Types accepted for trading on our exchange:" << std::endl;
+            for (const std::string& s : acceptedProducts)
+            {
+                std::cout << s << std::endl;
+            }
+        }
+    }
+    else
+    {
+        try
+        {
+            OrderBookEntry obe = CSVReader::stringsToOBE(tokens[1],
+                                                    tokens[2],
+                                                    currentTime,
+                                                    tokens[0],
+                                                    OrderBookType::bid);
+        std::cout << "Your Input: " << bidUserInput << " is valid! Entry accepted for further processing." << std::endl;
+        orderbook.insertOrder(obe);
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << "Error Message from: MerkleMain::placeAsk function:" << std::endl;
+            std::cout << "Bad Floating point values entered: " << tokens[1] << " or " << tokens[2] << std::endl;
+        }
+        
+    }
 
 }
 void MerkleMain::printWallet(void){
