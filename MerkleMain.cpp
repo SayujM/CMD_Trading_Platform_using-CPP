@@ -292,8 +292,8 @@ void MerkleMain::placeBid(void){
 
 }
 void MerkleMain::printWallet(void){
-    std::cout << "Print wallet - Your wallet is currently empty!" << std::endl;
-    std::cout << "Don't worry, just keep at it!!" << std::endl;
+    std::cout << "Printing wallet - Current contents of your wallet:" << std::endl;
+    std::cout << wallet.walletToString() << std::endl;
 }
 void MerkleMain::optionContinue(void){
     // std::cout << "Continue - Going through a transaction" << std::endl;
