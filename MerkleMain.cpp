@@ -21,7 +21,8 @@ void MerkleMain::init()
     int i = 0;
     currentTime = orderbook.getEarliestTime();
     previousTime = orderbook.getEarliestTime();
-    while (i < 9)  
+    wallet.insertCurrency("BTC", 10);
+    while (true)  
     {
         // Printing the menu
         printMenu();

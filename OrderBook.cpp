@@ -17,7 +17,7 @@ std::vector<std::string> OrderBook::getKnownProducts()
     std::map<std::string, bool> prodMap;  // we can map the string to anything but bool is the smallest logical item & hence preferred for memory opt
 
     // Now to loop through the orderbook
-    for (OrderBookEntry& e: orders)
+    for (const OrderBookEntry& e: orders)
     {
         prodMap[e.product] = true;
     }
