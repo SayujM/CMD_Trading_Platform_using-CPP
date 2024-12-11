@@ -22,6 +22,9 @@ void MerkleMain::init()
     currentTime = orderbook.getEarliestTime();
     previousTime = orderbook.getEarliestTime();
     wallet.insertCurrency("BTC", 10);
+    wallet.insertCurrency("BTC", 15);
+    wallet.insertCurrency("ETH", 25);
+    wallet.insertCurrency("USDT", 100);
     while (true)  
     {
         // Printing the menu
@@ -95,8 +98,13 @@ int MerkleMain::getUserOption(void){
 }
 
 void MerkleMain::printHelp(void){
-    std::cout << "Help - Choose options from the menu" << std::endl;
-    std::cout << "and follow the onscreen instructions." << std::endl;
+    std::cout << "Help - Choose options mentioned in the menu & follow the onscreen instructions." << std::endl;
+    std::vector<std::string> acceptedProducts = orderbook.getKnownProducts();
+    std::cout << "Note that only the following Order Types are accepted for trading on our exchange:" << std::endl;
+    for (const std::string& s : acceptedProducts)
+    {
+        std::cout << s << std::endl;
+    }
 }
 void MerkleMain::printExchangeStats(void){
     // std::cout << "Exchange stats - Loading data ..." << std::endl;
@@ -235,7 +243,18 @@ void MerkleMain::placeAsk(void){
                                                     tokens[0],
                                                     OrderBookType::ask);
         std::cout << "Your Input: " << askUserInput << " is valid! Entry accepted for further processing." << std::endl;
-        orderbook.insertOrder(obe);
+        if (wallet.canFulfillOrder(obe))
+        {
+            std::cout << "ALL OK!! Order Placed - Good Luck." << std::endl;
+            orderbook.insertOrder(obe);
+        }
+        else
+        {
+            std::cout << "#################################---ORDER CANCELLED---###########################################"<< std::endl;
+            std::cout << "You do NOT have sufficient balance in your wallet to place this order! Check your wallet status." << std::endl;
+            std::cout << "#################################################################################################"<< std::endl;
+        }
+        
         }
         catch(const std::exception& e)
         {
@@ -280,7 +299,18 @@ void MerkleMain::placeBid(void){
                                                     tokens[0],
                                                     OrderBookType::bid);
         std::cout << "Your Input: " << bidUserInput << " is valid! Entry accepted for further processing." << std::endl;
-        orderbook.insertOrder(obe);
+        if (wallet.canFulfillOrder(obe))
+        {
+            std::cout << "ALL OK!! Order Placed - Good Luck." << std::endl;
+            orderbook.insertOrder(obe);
+        }
+        else
+        {
+            std::cout << "#################################---ORDER CANCELLED---###########################################"<< std::endl;
+            std::cout << "You do NOT have sufficient balance in your wallet to place this order! Check your wallet status." << std::endl;
+            std::cout << "#################################################################################################"<< std::endl;
+        }
+        
         }
         catch(const std::exception& e)
         {
@@ -314,9 +344,6 @@ void MerkleMain::optionContinue(void){
             }
         }
     }
-    
-    std::cout << "Sales made (count): " << sales.size() << std::endl;
-    
     previousTime = currentTime;
     currentTime = orderbook.getNextTime(currentTime);
     std::cout << "Updated current time is: " << currentTime << std::endl;

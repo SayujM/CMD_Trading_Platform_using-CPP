@@ -1,4 +1,5 @@
 #include "Wallet.h"
+#include "CSVReader.h"
 #include<iostream>
 
 Wallet::Wallet()
@@ -73,4 +74,25 @@ bool Wallet::removeCurrency(std::string type, double amount)
             return false;
         }
     } 
+}
+
+bool Wallet::canFulfillOrder(const OrderBookEntry order)
+{
+    std::vector<std::string> currencies = CSVReader::tokenise(order.product, '/');
+    // Validating Ask Order
+    if (order.orderType == OrderBookType::ask)
+    {
+        double amount = order.amount;
+        std::string sellingCurrency = currencies[0];
+        return containsCurrency(sellingCurrency, amount);
+    }
+    // Validating Bid Order
+    if (order.orderType == OrderBookType::bid)
+    {
+        double amount = order.price * order.amount;
+        std::string purchasingCurrency = currencies[1];
+        return containsCurrency(purchasingCurrency, amount);
+    }
+    // Else - Non-Standard order type received  
+    return false;
 }

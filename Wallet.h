@@ -1,6 +1,7 @@
 #ifndef WALLET_H
 #define WALLET_H
 
+#include "OrderBookEntry.h"
 #include<string>
 #include<map>
 
@@ -15,6 +16,8 @@ class Wallet
         /** Check if the wallet contains the given amount or more of the currency mentioned */
         bool containsCurrency(std::string type, double amount);
         /** Generate a string representation of the object from Wallet class */
+        /** Validate an Order based on the current Wallet status */
+        bool canFulfillOrder(OrderBookEntry order);
         std::string walletToString();
     private:
         std::map<std::string, double> currencyBalance;
