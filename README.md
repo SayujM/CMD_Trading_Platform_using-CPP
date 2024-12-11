@@ -12,3 +12,5 @@ The OrderBook class presents a high level interface on all the orders in the ord
 including query functions to find out which products are in the data set, and to retrieve a subset of the orders using filters.
 
 The MerkleMain class represents the application itself, and it deals with user input and menu printing. 
+
+The Wallet class represents the user's wallet that contains the currency & its amount that he/she can use to place an ask or bid order.
