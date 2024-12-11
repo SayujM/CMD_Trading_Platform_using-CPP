@@ -19,6 +19,8 @@ class Wallet
         /** Validate an Order based on the current Wallet status */
         bool canFulfillOrder(OrderBookEntry order);
         std::string walletToString();
+        /** Operator Overloading for Wallet class */
+        friend std::ostream& operator<<(std::ostream& os, Wallet& wallet);
     private:
         std::map<std::string, double> currencyBalance;
 };

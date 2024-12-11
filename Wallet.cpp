@@ -96,3 +96,9 @@ bool Wallet::canFulfillOrder(const OrderBookEntry order)
     // Else - Non-Standard order type received  
     return false;
 }
+
+std::ostream& operator<<(std::ostream& os, Wallet& wallet)
+{
+os << wallet.walletToString();
+return os;
+}
