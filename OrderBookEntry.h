@@ -13,7 +13,8 @@ enum class OrderBookType
     bid,
     ask,
     unknown,
-    sale
+    askSale,
+    bidSale
 };
 
 // Creating a class for holding Order Book entries
@@ -26,7 +27,8 @@ class OrderBookEntry
                         double _amount,
                         std::string _timestamp,
                         std::string _product,
-                        OrderBookType _orderType);
+                        OrderBookType _orderType,
+                        std::string username = "dataset");  // The default value of an attribute is only to be updated in the header file ( not in the cpp)
         static OrderBookType strToOrderBookType(std::string token);
         static bool compareByTimestamp(const OrderBookEntry& e1, const OrderBookEntry& e2)
         {
@@ -46,6 +48,7 @@ class OrderBookEntry
         std::string timestamp;
         std::string product;
         OrderBookType orderType;
+        std::string username;
 };
 
 // Prototypes for the functions

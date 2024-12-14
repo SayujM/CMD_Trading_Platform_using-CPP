@@ -5,13 +5,15 @@ OrderBookEntry::OrderBookEntry( double _price,
                                 double _amount,
                                 std::string _timestamp,
                                 std::string _product,
-                                OrderBookType _orderType)
+                                OrderBookType _orderType,
+                                std::string _username)
 :    //Constructor initialisation list
     price(_price),
     amount(_amount),
     timestamp(_timestamp),
     product(_product),
-    orderType(_orderType)
+    orderType(_orderType),
+    username(_username)
 {
     // Doesn't require further code to initialse data members of the class
 }
@@ -26,6 +28,14 @@ OrderBookType OrderBookEntry::strToOrderBookType(std::string token)
     else if (token == "bid")
     {
         return OrderBookType::bid;
+    }
+    else if (token == "askSale")
+    {
+        return OrderBookType::askSale;
+    }
+    else if (token == "bidSale")
+    {
+        return OrderBookType::bidSale;
     }
     else
     {
@@ -44,8 +54,10 @@ std::string toString(OrderBookType type)
         return "bid";
     case OrderBookType::ask:
         return "ask";
-    case OrderBookType::sale:
-        return "sale";
+    case OrderBookType::askSale:
+        return "askSale";
+    case OrderBookType::bidSale:
+        return "bidSale";
     default:
         return "unknown";
     }

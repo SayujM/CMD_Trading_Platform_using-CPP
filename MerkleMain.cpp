@@ -242,6 +242,7 @@ void MerkleMain::placeAsk(void){
                                                     currentTime,
                                                     tokens[0],
                                                     OrderBookType::ask);
+            obe.username = "simUser";
         std::cout << "Your Input: " << askUserInput << " is valid! Entry accepted for further processing." << std::endl;
         if (wallet.canFulfillOrder(obe))
         {
@@ -298,6 +299,7 @@ void MerkleMain::placeBid(void){
                                                     currentTime,
                                                     tokens[0],
                                                     OrderBookType::bid);
+            obe.username = "simUser"; 
         std::cout << "Your Input: " << bidUserInput << " is valid! Entry accepted for further processing." << std::endl;
         if (wallet.canFulfillOrder(obe))
         {

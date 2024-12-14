@@ -156,7 +156,19 @@ std::vector<OrderBookEntry> OrderBook::matchAsksToBids(const std::string product
                                     0,
                                     timestamp,
                                     product,
-                                    OrderBookType::sale};
+                                    OrderBookType::askSale}; // Defaulting to username = dataset & Order Type askSale
+                // However, in case of matching with Simulation User Entries:
+                if (bid.username == "simUser")
+                {
+                    sale.username = "simUser";
+                    sale.orderType = OrderBookType::bidSale;
+                }
+                if (ask.username == "simUser")
+                {
+                    sale.username = "simUser";
+                    sale.orderType = OrderBookType::askSale;
+                }
+                // Note the above logic does NOT handle Simulation User placing Ask & Bid orders for same Product in the same timeframe!
                 // We need to capture the right amount to be updated for the sale:
                 // Scenario-1: Bid Amount equals amount from ask
                 if (bid.amount == ask.amount)

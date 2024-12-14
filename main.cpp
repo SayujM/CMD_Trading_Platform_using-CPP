@@ -11,11 +11,30 @@
 int main()
 {   
     // Printing the in line interaction menu
-    MerkleMain app{};
-    std::cout << "====================" << std::endl;
-    std::cout << "Program Menu Details:" << std::endl;
-    std::cout << "====================" << std::endl;
-    app.init();
+    // MerkleMain app{};
+    // std::cout << "====================" << std::endl;
+    // std::cout << "Program Menu Details:" << std::endl;
+    // std::cout << "====================" << std::endl;
+    // app.init();
+
+    Wallet testwallet{};
+    std::cout << "-----Initial Status of Wallet -----"<< std::endl;
+    std::cout << testwallet << std::endl;
+    std::cout << "Testing Function insertCurrency:" << std::endl;
+    std::cout << "Adding 10 BTC to wallet" << std::endl;
+    testwallet.insertCurrency("BTC", 10);
+    std::cout << "-----Revised Status of Wallet -----"<< std::endl;
+    std::cout << testwallet << std::endl;
+    std::cout << "Removing 2 BTC from wallet" << std::endl;
+    testwallet.removeCurrency("BTC", 2);
+    std::cout << "-----Revised Status of Wallet -----"<< std::endl;
+    std::cout << testwallet << std::endl;
+    std::cout << "Check is wallet still contains 5 BTC" << std::endl;
+    std::cout << "Note that if wallet contains it then 1, else 0" << std::endl;
+    std::cout << "Answer: " << testwallet.containsCurrency("BTC",5) << std::endl;
+    std::cout << "Check is wallet still contains 10 BTC" << std::endl;
+    std::cout << "Note that if wallet contains it then 1, else 0" << std::endl;
+    std::cout << "Answer: " << testwallet.containsCurrency("BTC",10) << std::endl;
     return 0;
 }
 
