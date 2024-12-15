@@ -14,7 +14,8 @@ enum class OrderBookType
     ask,
     unknown,
     askSale,
-    bidSale
+    bidSale,
+    intraAccountSale
 };
 
 // Creating a class for holding Order Book entries

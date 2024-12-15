@@ -102,3 +102,35 @@ std::ostream& operator<<(std::ostream& os, Wallet& wallet)
 os << wallet.walletToString();
 return os;
 }
+
+void Wallet::processSale(OrderBookEntry& sale)
+{
+    if (sale.username == "simUser")
+    {
+        std::vector<std::string> currencies = CSVReader::tokenise(sale.product, '/');
+        // Handling Ask sale for the user
+        if (sale.orderType == OrderBookType::askSale)
+        {
+            double outgoingAmount = sale.amount;
+            std::string outgoingCurrency = currencies[0];
+            double incomingAmount = sale.price * sale.amount;
+            std::string incomingCurrency = currencies[1];
+            // Now update the wallet (map data-structure)
+            currencyBalance[incomingCurrency] += incomingAmount;
+            currencyBalance[outgoingCurrency] -= outgoingAmount;
+        }
+        // Handling Bid sale for the user
+        if (sale.orderType == OrderBookType::bidSale)
+        {
+            double outgoingAmount = sale.price * sale.amount;
+            std::string outgoingCurrency = currencies[1];
+            double incomingAmount = sale.amount;
+            std::string incomingCurrency = currencies[0];
+            // Now update the wallet (map data-structure)
+            currencyBalance[incomingCurrency] += incomingAmount;
+            currencyBalance[outgoingCurrency] -= outgoingAmount;
+        }
+        // Handling intra Account sale for the user
+        // No Action to take as the matching logic shall place the revised price & amount for the balance Bid or Ask order.
+    }
+}

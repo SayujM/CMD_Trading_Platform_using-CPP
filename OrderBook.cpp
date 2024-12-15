@@ -169,6 +169,10 @@ std::vector<OrderBookEntry> OrderBook::matchAsksToBids(const std::string product
                     sale.orderType = OrderBookType::askSale;
                 }
                 // Note the above logic does NOT handle Simulation User placing Ask & Bid orders for same Product in the same timeframe!
+                if (ask.username == "simUser" && bid.username == "simUser")
+                {
+                    sale.orderType = OrderBookType::intraAccountSale;  // Using a new Order Book Type to register this - we can treat this as an ask or bid order for settling amount vs qty.
+                }
                 // We need to capture the right amount to be updated for the sale:
                 // Scenario-1: Bid Amount equals amount from ask
                 if (bid.amount == ask.amount)

@@ -343,6 +343,11 @@ void MerkleMain::optionContinue(void){
             for (unsigned int i = 0; i < sales.size(); ++i)
             {
                 std::cout << "Transaction-" << i+1 << ": Amount Sold: " << sales[i].amount << " | Sold at Price: " << sales[i].price << std::endl;
+                if (sales[i].username == "simUser")
+                {
+                    // Update user Wallet
+                    wallet.processSale(sales[i]);
+                }
             }
         }
     }

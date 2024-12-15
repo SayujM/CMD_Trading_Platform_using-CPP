@@ -21,6 +21,8 @@ class Wallet
         std::string walletToString();
         /** Operator Overloading for Wallet class */
         friend std::ostream& operator<<(std::ostream& os, Wallet& wallet);
+        /** Update user Wallet based on Matched Orders details from Sale Entry */
+        void processSale(OrderBookEntry& sale);
     private:
         std::map<std::string, double> currencyBalance;
 };

@@ -37,6 +37,10 @@ OrderBookType OrderBookEntry::strToOrderBookType(std::string token)
     {
         return OrderBookType::bidSale;
     }
+    else if (token == "intraAccountSale")
+    {
+        return OrderBookType::intraAccountSale;
+    }
     else
     {
         return OrderBookType::unknown;
@@ -58,6 +62,8 @@ std::string toString(OrderBookType type)
         return "askSale";
     case OrderBookType::bidSale:
         return "bidSale";
+    case OrderBookType::intraAccountSale:
+        return "intraAccountSale";
     default:
         return "unknown";
     }
